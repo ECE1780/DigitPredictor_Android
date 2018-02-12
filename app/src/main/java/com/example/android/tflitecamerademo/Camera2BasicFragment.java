@@ -667,13 +667,12 @@ public class Camera2BasicFragment extends Fragment
     int height = center.getHeight();
     Bitmap centerImage = Bitmap.createBitmap(textureViewImage, left, top, width, height);
     Bitmap resizedImage = Bitmap.createScaledBitmap(centerImage, 28, 28, false);
-//    Bitmap bitmap =
-//        textureView.getBitmap(ImageClassifier.DIM_IMG_SIZE_X, ImageClassifier.DIM_IMG_SIZE_Y);
+
     String textToShow = classifier.classifyFrame(resizedImage);
     textureViewImage.recycle();
     centerImage.recycle();
     resizedImage.recycle();
-//    bitmap.recycle();
+
     showToast(textToShow);
   }
 
