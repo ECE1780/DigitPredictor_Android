@@ -46,9 +46,6 @@ public class ImageClassifier {
   /** Name of the model file stored in Assets. */
   private static final String MODEL_PATH = "model.tflite";
 
-  /** Name of the label file stored in Assets. */
-//  private static final String LABEL_PATH = "labels.txt";
-
   /** Number of results to show in the UI. */
   private static final int RESULTS_TO_SHOW = 1;
 
@@ -60,9 +57,6 @@ public class ImageClassifier {
   static final int DIM_IMG_SIZE_X = 28;
   static final int DIM_IMG_SIZE_Y = 28;
 
-//  private static final int IMAGE_MEAN = 128;
-//  private static final float IMAGE_STD = 128.0f;
-
 
   /* Preallocated buffers for storing image data in. */
   private int[] intValues = new int[DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y];
@@ -70,18 +64,12 @@ public class ImageClassifier {
   /** An instance of the driver class to run model inference with Tensorflow Lite. */
   private Interpreter tflite;
 
-  /** Labels corresponding to the output of the vision model. */
-//  private List<String> labelList;
-
   /** A ByteBuffer to hold image data, to be feed into Tensorflow Lite as inputs. */
   private ByteBuffer imgData = null;
 
   /** An array to hold inference results, to be feed into Tensorflow Lite as outputs. */
   private float[][] outputProbArray = null;
-  /** multi-stage low pass filter **/
-//  private float[][] filterLabelProbArray = null;
-//  private static final int FILTER_STAGES = 3;
-//  private static final float FILTER_FACTOR = 0.4f;
+
 
   private PriorityQueue<Map.Entry<String, Float>> sortedLabels =
       new PriorityQueue<>(
@@ -96,7 +84,6 @@ public class ImageClassifier {
   /** Initializes an {@code ImageClassifier}. */
   ImageClassifier(Activity activity) throws IOException {
     tflite = new Interpreter(loadModelFile(activity));
-//    labelList = loadLabelList(activity);
     imgData =
         ByteBuffer.allocateDirect(
             4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y * DIM_PIXEL_SIZE);
@@ -104,8 +91,6 @@ public class ImageClassifier {
 
     outputProbArray = new float[1][10];
 
-//    labelProbArray = new float[1][labelList.size()];
-//    filterLabelProbArray = new float[FILTER_STAGES][labelList.size()];
     Log.d(TAG, "Created a Tensorflow Lite Image Classifier.");
   }
 
@@ -122,9 +107,6 @@ public class ImageClassifier {
     long endTime = SystemClock.uptimeMillis();
     Log.d(TAG, "Timecost to run model inference: " + Long.toString(endTime - startTime));
 
-    // smooth the results
-//    applyFilter();
-
     // print the results
     String textToShow = printTopKLabels();
     return textToShow;
@@ -135,19 +117,6 @@ public class ImageClassifier {
     tflite.close();
     tflite = null;
   }
-
-  /** Reads label list from Assets. */
-//  private List<String> loadLabelList(Activity activity) throws IOException {
-//    List<String> labelList = new ArrayList<String>();
-//    BufferedReader reader =
-//        new BufferedReader(new InputStreamReader(activity.getAssets().open(LABEL_PATH)));
-//    String line;
-//    while ((line = reader.readLine()) != null) {
-//      labelList.add(line);
-//    }
-//    reader.close();
-//    return labelList;
-//  }
 
   /** Memory-map the model file in Assets. */
   private MappedByteBuffer loadModelFile(Activity activity) throws IOException {
